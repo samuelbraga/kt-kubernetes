@@ -1,0 +1,27 @@
+# Default values for chart-api.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+applicationName: game-2048
+replicaCount: 1
+namespace: prd
+image:
+  name: game-2048
+  repository: hivedtiacrk8s.azurecr.io
+  pullPolicy: IfNotPresent
+  containerPort: 80
+  healthCheck: /
+  tag: latest
+imagePullSecrets:
+  name: hivedtiacrk8ssecret
+
+ingress:
+  nameCertificate: valeglobalnet
+  hostName: agw-integra-dev.eastus.cloudapp.azure.com
+  path: /2048/*
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80

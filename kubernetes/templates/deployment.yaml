@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name:  {{ .Values.applicationName }}
+  namespace: {{ .Values.namespace }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Values.applicationName }}
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      name: {{ .Values.applicationName }}
+      labels:
+        app: {{ .Values.applicationName }}
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets.name }}      
+      containers:
+      - name: {{ .Values.applicationName }}
+        image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.image.containerPort }}
+          name: http
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.image.healthCheck }}
+            port: {{ .Values.image.containerPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 10
+        env:
+          {{- range .Values.env }}
+          - name: {{ .name }}
+            value: {{ .value }}
+         {{- end }}      
+        resources:
+          limits:
+            cpu: 50m
+            memory: 512Mi
+status: {}
