@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 2048-samuel-braga
+  namespace: samuel-braga
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 2048-samuel-braga
+  template:
+    metadata:
+      name: 2048-samuel-braga
+      labels:
+        app: 2048-samuel-braga
+    spec:
+      imagePullSecrets:
+      - name: __secret__
+      containers:
+      - name: 2048-samuel-braga
+        image: "__secret-server__/2048-samuel-braga:123"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        readinessProbe:
+          httpGet:
+            path: "/index.html"
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 1
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            cpu: 25m
+            memory: 128Mi

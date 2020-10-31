@@ -1,0 +1,4 @@
+name: chart-nginx-2048
+description: Helm chart para deploy de uma aplicação web (nginx) no kubernetes
+type: application
+version: 1.0.0

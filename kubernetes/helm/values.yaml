@@ -1,0 +1,35 @@
+applicationName: 2048-samuel-braga
+namespace: samuel-braga
+
+deployment:
+  replicaCount: 1
+  image:
+    name: 2048-samuel-braga
+    tag: 123
+    repository: __secret-server__
+    imagePullSecret: __secret__
+    pullPolicy: IfNotPresent
+  containerPort: 80
+  protcol: http
+  healthCheckPath: /index.html
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 25m
+      memory: 128Mi
+
+hpa:
+  minReplicas: 1
+  maxReplicas: 3
+  metricName: memory
+  averageUtilization: 70
+
+ingress:
+  host: agw.hostname.com
+  path: /samuel-braga*
+
+service:
+  externalPort: 80
+  protcol: TCP

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.applicationName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.applicationName }}
+  template:
+    metadata:
+      name: {{ .Values.applicationName }}
+      labels:
+        app: {{ .Values.applicationName }}
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.deployment.image.imagePullSecret }}
+      containers:
+      - name: {{ .Values.applicationName }}
+        image: "/{{ .Values.deployment.image.name }}:{{ .Values.deployment.image.tag }}"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.deployment.containerPort }}
+          name: {{ .Values.deployment.protcol }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.deployment.healthCheckPath }}
+            port: {{ .Values.deployment.containerPort }}
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 1
+          failureThreshold: 5
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.deployment.healthCheckPath }}
+            port: {{ .Values.deployment.containerPort }}
+          initialDelaySeconds: 100
+          periodSeconds: 15
+          timeoutSeconds: 1
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: {{ .Values.deployment.resources.requests.cpu }}
+            memory: {{ .Values.deployment.resources.requests.memory }}
+          limits:
+            cpu: {{ .Values.deployment.resources.limits.cpu }}
+            memory: {{ .Values.deployment.resources.limits.memory }}
