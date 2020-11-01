@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: 2048-samuel-braga
+  name: game-samuel-braga
   namespace: samuel-braga
 spec:
   selector:
-    app: 2048-samuel-braga
+    app: game-samuel-braga
   ports:
   - protocol: TCP
     port: 80
