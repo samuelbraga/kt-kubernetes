@@ -4,14 +4,14 @@ namespace: samuel-braga
 deployment:
   replicaCount: 1
   image:
-    name: 2048-samuel-braga
+    name: game-samuelbraga
     tag: 123
     repository: __secret-server__
     imagePullSecret: __secret__
     pullPolicy: IfNotPresent
   containerPort: 80
   protcol: http
-  healthCheckPath: /index.html
+  healthCheckPath: /samuel-braga/index.html
   resources:
     requests:
       cpu: 10m
@@ -29,6 +29,7 @@ hpa:
 ingress:
   host: agw.hostname.com
   path: /samuel-braga*
+  backendPathPrefix: /samuel-braga
 
 service:
   externalPort: 80

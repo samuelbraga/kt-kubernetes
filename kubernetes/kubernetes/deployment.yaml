@@ -14,16 +14,18 @@ spec:
       labels:
         app: game-samuel-braga
     spec:
+      imagePullSecrets:
+      - name: ktk8s-secret
       containers:
       - name: game-samuel-braga
-        image: "nginx"
+        image: ktk8s.azurecr.io/game-samuelbraga:123
         imagePullPolicy: Always
         ports:
         - containerPort: 80
           name: http
         readinessProbe:
           httpGet:
-            path: "/index.html"
+            path: "/samuel-braga/index.html"
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 15

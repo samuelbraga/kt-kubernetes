@@ -18,7 +18,7 @@ spec:
       - name: {{ .Values.deployment.image.imagePullSecret }}
       containers:
       - name: {{ .Values.applicationName }}
-        image: "/{{ .Values.deployment.image.name }}:{{ .Values.deployment.image.tag }}"
+        image: "{{ .Values.deployment.image.repository }}/{{ .Values.deployment.image.name }}:{{ .Values.deployment.image.tag }}"
         imagePullPolicy: Always
         ports:
         - containerPort: {{ .Values.deployment.containerPort }}
